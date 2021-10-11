@@ -29,26 +29,27 @@ public class Car implements Comparable<Car> {
 	}
 
 	private void sizeValidation(String name) {
-		if(name.length() > CAR_NAME_SIZE) {
+		if (name.length() > CAR_NAME_SIZE) {
 			throw new IllegalArgumentException("[ERROR] 이름은 5자 이하만 가능합니다.");
 		}
 	}
 
 	public String getCarStackPrintBar() {
-    	StringBuilder strReturn = new StringBuilder();
-    	for(int i=0; i< this.stack; i++) {
-    		strReturn.append("-");
-    	}
-    	return strReturn.toString();
-    }
-	
+		StringBuilder strReturn = new StringBuilder();
+		for (int i=0; i< this.stack; i++) {
+			strReturn.append("-");
+		}
+		return strReturn.toString();
+	}
+
 	@Override
 	public int compareTo(Car o) {
 		if (this.stack < o.getStack()) {
-            return 1;
-        } else if (this.stack > o.getStack()) {
-            return -1;
-        }
+			return 1;
+		} 
+		if (this.stack > o.getStack()) {
+			return -1;
+		}
 		return 0;
 	}
 

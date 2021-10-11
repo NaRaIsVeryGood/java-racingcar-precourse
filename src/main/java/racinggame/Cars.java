@@ -9,7 +9,7 @@ public class Cars {
 	
 	public Cars(String strCars) {
 		String[] arrayCars = strCars.split(",");
-		for(int i=0; i < arrayCars.length; i++) {
+		for (int i = 0; i < arrayCars.length; i++) {
 			cars.add(new Car(isEmpty(arrayCars[i])));
 		}
 	}
@@ -23,7 +23,7 @@ public class Cars {
 	}
 	
 	private String isEmpty(String name) {
-		if(name == null || "".equals(name.trim())) {
+		if (name == null || "".equals(name.trim())) {
 			throw new IllegalArgumentException("[ERROR] 빈값이 들어가선 안됩니다.");
 		}
 		return name.trim();
