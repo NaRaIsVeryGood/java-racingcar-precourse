@@ -1,9 +1,13 @@
 package racinggame;
 
-import nextstep.test.NSTest;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import nextstep.test.NSTest;
 
 public class ApplicationTest extends NSTest {
     private static final int MOVING_FORWARD = 4;
@@ -32,6 +36,21 @@ public class ApplicationTest extends NSTest {
         });
     }
 
+    @Test
+    void 이름_입력_받기_자릿수() {
+    	Car car = new Car("aaa");
+    	assertThat(car.getName()).contains("aaa");
+    	assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()->{
+    		car.setName("bbbbbbbbbbbbbbbbbbb");
+    	});
+    }
+    @Test
+    void 이름_입력_받기_쉼표() {
+    	assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()->{
+    		run("pobi,,woni","pobi,woni, ");
+    	});
+    }
+    
     @AfterEach
     void tearDown() {
         outputStandard();
