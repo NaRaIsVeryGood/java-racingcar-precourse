@@ -2,14 +2,18 @@ package racinggame;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mockStatic;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import nextstep.test.NSTest;
+import nextstep.utils.Randoms;
 
 public class ApplicationTest extends NSTest {
     private static final int MOVING_FORWARD = 4;
@@ -66,9 +70,21 @@ public class ApplicationTest extends NSTest {
     		verify(ERROR_MESSAGE);
     	});
     	assertSimpleTest(() -> {
-    		runNoLineFound("pobi,woni","2");
+    		run("pobi,woni","2");
     		verify("Finish");
     	});
+    }
+    
+    @Test
+    @Order(5)
+    void 전진_정지2() {
+        try (final MockedStatic<Randoms> mockRandoms = mockStatic(Randoms.class)) {
+            mockRandoms
+                    .when(() -> Randoms.pickNumberInRange(anyInt(), anyInt()))
+                    .thenReturn(3, 4, 4, 3);
+            run("pobi,woni","2");
+            verify("Finish");
+        }
     }
     
     

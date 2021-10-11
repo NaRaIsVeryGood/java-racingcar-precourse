@@ -1,6 +1,7 @@
 package racinggame;
 
 import nextstep.utils.Console;
+import nextstep.utils.Randoms;
 
 public class Application {
 	
@@ -9,31 +10,39 @@ public class Application {
 	
     public static void main(String[] args) {
 
-    	while(true) {
+    	//while(true) {
+    		input();
     		play();
-    	}
-    	
+    		System.out.println("Finish");
+    	//}
     }
-    
-    public static void play() {
+
+    public static void input() {
     	boolean loopStat = true;
     	while(loopStat) {
     		loopStat = inputCars();
     	}
-    	
     	loopStat = true;
     	while(loopStat) {
     		loopStat = inputLoopCount();
     	}
+    }
+    
+    public static void play() {
     	
-    	System.out.println("Finish");
+    	System.out.println("실행결과");
+    	while(LOOP_COUNT > 0) {
+    		carRacing();
+    		LOOP_COUNT--;
+    	}
     }
     
 	public static boolean inputCars() {
 		try {
 	    	System.out.println("경주할 자동차 이름을 입력하세요. (이름은 쉼표(,) 기준 구분)");
-			String inputCars = Console.readLine();
-			cars = new Cars(inputCars);
+			String inputVal = Console.readLine();
+			System.out.println(inputVal);
+			cars = new Cars(inputVal);
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 			return true;
@@ -41,9 +50,10 @@ public class Application {
 		return false;
     }
 
-    private static boolean inputLoopCount() {
+	public static boolean inputLoopCount() {
     	System.out.println("시도할 횟수는 몇회 인가요?");
     	String inputVal = Console.readLine();
+    	System.out.println(inputVal);
     	try {
     		LOOP_COUNT = Integer.parseInt(inputVal);
     	} catch (NumberFormatException e) {
@@ -52,5 +62,24 @@ public class Application {
     	}
     	return false;
 	}
-
+    
+    public static int carRacingRandomGoAndStopReturn() {
+    	int randomVal = Randoms.pickNumberInRange(0, 9);
+    	if(randomVal <= 3) {
+    		return 0;	// 멈춤
+    	}
+    	return 1;	// 전진
+    }
+    
+    public static void carRacing() {
+    	System.out.println();
+    	
+    	for(Car car : cars.getCars()) {
+    		car.setStack(car.getStack()+carRacingRandomGoAndStopReturn());
+    		
+    		System.out.printf("%s: %s", car.getName(), car.getCarStackPrintBar());
+    		System.out.println();
+    	}
+    }
+    
 }
