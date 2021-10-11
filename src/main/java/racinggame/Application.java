@@ -10,8 +10,15 @@ import nextstep.utils.Randoms;
 public class Application {
 	
 	public static Cars cars;
-	public static int LOOP_COUNT=0;
 	
+	public static final int RANDOM_MIN = 0;
+	public static final int RANDOM_MAX = 9;
+	public static final int GOANDSTOP_REFVAL = 3;
+	public static final int GOANDSTOP_GO = 1;
+	public static final int GOANDSTOP_STOP = 0;
+	
+	public static int LOOP_COUNT=0;
+
 	public static void main(String[] args) {
 		input();
 		play();
@@ -64,11 +71,10 @@ public class Application {
 	}
 
 	public static int carRacingRandomGoAndStopReturn() {
-		int randomVal = Randoms.pickNumberInRange(0, 9);
-		if (randomVal <= 3) {
-			return 0;	// 멈춤
+		if (Randoms.pickNumberInRange(RANDOM_MIN, RANDOM_MAX) <= GOANDSTOP_REFVAL) {
+			return GOANDSTOP_STOP;	// 멈춤
 		}
-		return 1;	// 전진
+		return GOANDSTOP_GO;	// 전진
 	}
 	
 	public static void carRacing() {
