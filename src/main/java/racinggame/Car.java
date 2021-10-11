@@ -1,6 +1,6 @@
 package racinggame;
 
-public class Car {
+public class Car implements Comparable<Car> {
 	
 	private static final int CAR_NAME_SIZE = 5;
 	
@@ -42,6 +42,16 @@ public class Car {
     	return strReturn.toString();
     }
 	
+	@Override
+	public int compareTo(Car o) {
+		if (this.stack < o.getStack()) {
+            return 1;
+        } else if (this.stack > o.getStack()) {
+            return -1;
+        }
+		return 0;
+	}
+
 	@Override
 	public String toString() {
 		return "Car [name=" + name + ", stack=" + stack + "]";

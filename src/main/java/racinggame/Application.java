@@ -1,5 +1,9 @@
 package racinggame;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import nextstep.utils.Console;
 import nextstep.utils.Randoms;
 
@@ -9,12 +13,9 @@ public class Application {
 	public static int LOOP_COUNT=0;
 	
     public static void main(String[] args) {
-
-    	//while(true) {
-    		input();
-    		play();
-    		System.out.println("Finish");
-    	//}
+		input();
+		play();
+		result();
     }
 
     public static void input() {
@@ -29,8 +30,7 @@ public class Application {
     }
     
     public static void play() {
-    	
-    	System.out.println("실행결과");
+    	System.out.println("\n실행결과");
     	while(LOOP_COUNT > 0) {
     		carRacing();
     		LOOP_COUNT--;
@@ -72,13 +72,28 @@ public class Application {
     }
     
     public static void carRacing() {
-    	System.out.println();
-    	
     	for(Car car : cars.getCars()) {
     		car.setStack(car.getStack()+carRacingRandomGoAndStopReturn());
-    		
-    		System.out.printf("%s: %s", car.getName(), car.getCarStackPrintBar());
-    		System.out.println();
+    		System.out.printf("%s : %s\n", car.getName(), car.getCarStackPrintBar());
+    	}
+    	System.out.println();
+    }
+    
+    public static void result() {
+    	Collections.sort(cars.getCars());
+    	
+    	int maxStack = cars.getCars().get(0).getStack();
+    	List<String> winnerCars = new ArrayList<String>();
+    	
+    	for(Car car : cars.getCars()) {
+    		winnerCar(winnerCars, maxStack, car);
+    	}
+    	System.out.println("최종 우승자는 " +  String.join(",", winnerCars) + " 입니다.");
+    }
+    
+    public static void winnerCar(List<String> winnerCars, int maxStack, Car car) {
+    	if(maxStack == car.getStack()) {
+    		winnerCars.add(car.getName());
     	}
     }
     

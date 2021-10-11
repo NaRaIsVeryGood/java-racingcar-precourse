@@ -7,14 +7,16 @@ import static org.mockito.Mockito.mockStatic;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.MockedStatic;
 
 import nextstep.test.NSTest;
 import nextstep.utils.Randoms;
 
+@TestMethodOrder(OrderAnnotation.class)
 public class ApplicationTest extends NSTest {
     private static final int MOVING_FORWARD = 4;
     private static final int STOP = 3;
@@ -26,8 +28,8 @@ public class ApplicationTest extends NSTest {
         setUp();
     }
 
-    @Disabled
     @Test
+    @Order(7)
     void 전진_정지() {
         assertRandomTest(() -> {
             run("pobi,woni", "1");
@@ -65,28 +67,37 @@ public class ApplicationTest extends NSTest {
     @Test
     @Order(4)
     void 시도횟수() {
+    	int tryCount = 2; 
     	assertSimpleTest(() -> {
-    		runNoLineFound("pobi,woni","fff");
-    		verify(ERROR_MESSAGE);
-    	});
-    	assertSimpleTest(() -> {
-    		run("pobi,woni","2");
-    		verify("Finish");
+    		run("pobi,woni", String.valueOf(tryCount));
+    		String output = output().substring( output().indexOf("실행결과"), output().length() ); // 실행결과 만 가지고 오기
+    		assertThat( output.split("pobi :").length-1 ).isEqualTo(2);
     	});
     }
-    
+
     @Test
     @Order(5)
-    void 전진_정지2() {
-        try (final MockedStatic<Randoms> mockRandoms = mockStatic(Randoms.class)) {
+    void 우승자_메시지리턴_한명우승() {
+    	try (final MockedStatic<Randoms> mockRandoms = mockStatic(Randoms.class)) {
             mockRandoms
                     .when(() -> Randoms.pickNumberInRange(anyInt(), anyInt()))
-                    .thenReturn(3, 4, 4, 3);
-            run("pobi,woni","2");
-            verify("Finish");
+                    .thenReturn(3, 4, 3,   2, 6, 5);
+            run("pobi,woni,bbb","2");
+            verify("최종 우승자는 woni 입니다.");
         }
     }
     
+    @Test
+    @Order(6)
+    void 우승자_메시지리턴_여러명우승() {
+    	try (final MockedStatic<Randoms> mockRandoms = mockStatic(Randoms.class)) {
+            mockRandoms
+                    .when(() -> Randoms.pickNumberInRange(anyInt(), anyInt()))
+                    .thenReturn(1, 4, 3,   1, 3, 4,   1, 4, 4);
+            run("pobi,woni,bbb","3");
+            verify("최종 우승자는 woni,bbb 입니다.");
+        }
+    }
     
     @AfterEach
     void tearDown() {
