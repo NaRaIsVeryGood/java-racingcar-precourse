@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import nextstep.test.NSTest;
@@ -30,8 +31,8 @@ public class ApplicationTest extends NSTest {
         }, MOVING_FORWARD, STOP);
     }
 
-    @Disabled
     @Test
+    @Order(3)
     void 이름에_대한_예외_처리() {
         assertSimpleTest(() -> {
             runNoLineFound("pobi,javaji");
@@ -40,6 +41,7 @@ public class ApplicationTest extends NSTest {
     }
 
     @Test
+    @Order(1)
     void 이름_입력_받기_자릿수() {
     	Car car = new Car("aaa");
     	assertThat(car.getName()).contains("aaa");
@@ -48,12 +50,27 @@ public class ApplicationTest extends NSTest {
     	});
     }
     @Test
+    @Order(2)
     void 이름_입력_받기_쉼표() {
     	assertSimpleTest(() -> {
     		runNoLineFound("pobi,,woni","pobi,woni, ");
     		verify(ERROR_MESSAGE);
     	});
     }
+    
+    @Test
+    @Order(4)
+    void 시도횟수() {
+    	assertSimpleTest(() -> {
+    		runNoLineFound("pobi,woni","fff");
+    		verify(ERROR_MESSAGE);
+    	});
+    	assertSimpleTest(() -> {
+    		runNoLineFound("pobi,woni","2");
+    		verify("Finish");
+    	});
+    }
+    
     
     @AfterEach
     void tearDown() {
